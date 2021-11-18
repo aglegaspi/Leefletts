@@ -21,10 +21,18 @@ struct ContentView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                        
+                        MemoView(item: item, format: itemFormatter)
+                        
                     } label: {
                         Text(item.timestamp!, formatter: itemFormatter)
                     }
+                    .padding()
+                    .background(content: {
+                        Capsule().foregroundColor(.red)
+                    })
+                    .listRowBackground(Color.clear)
+                    .listRowSeparatorTint(.clear)
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -39,6 +47,7 @@ struct ContentView: View {
                 }
             }
             Text("Select an item")
+                
         }
     }
 
@@ -84,5 +93,23 @@ private let itemFormatter: DateFormatter = {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}
+
+
+struct MemoView: View {
+    var item: Item
+    var format: DateFormatter
+
+    var body: some View {
+        ZStack {
+            Text(item.timestamp!, formatter: itemFormatter).lineSpacing(20)
+            Circle().foregroundColor(.secondary)
+        }
+        .background(Color.clear)
+        .padding()
+        
+        
+        
     }
 }
